@@ -33,63 +33,47 @@
 
 ### Introduction
 
-> Describe the general area covered by the project.
+Our fourth year project involves developing a facial recognition app that detects and stores a user’s faces.
 
 ### Outline
 
-> Outline the proposed project.
+The user will enter the application by tapping the application icon, which will open a camera and allow them access into the app after taking a picture of their face. The application will be able to perform this when the user is both wearing a mask on and with a mask off. The user will be able to utilize their camera to take pictures of their face and store their face and the images into the database of the application. Our facial recognition model will be developed, trained and tested using a neural network. We will be using a large dataset of thousands of images that contain pictures of faces with both masks worn and masks off. The application will analyse this dataset and output the results of this analysis.
 
 ### Background
 
-> Where did the ideas come from?
+The rise of usage of masks given this year's globel pandemic, we decided to do something related to this idea. We were also interested in machine learning and neural networks, and began to ponder how to incorporate masks and machine learning into one project. This was when the idea of facial recognition came about and this was the idea we came up with.
 
 ### Achievements
 
-> What functions will the project provide? Who will the users be?
+Ability of application to use the camera of users device and detect whether the user has a mask on or not. Training neural networks to be able to detect faces, if a face has a mask covering if a mask is being worn correctly or incorrectly.
 
 ### Justification
 
-> Why/when/where/how will it be useful?
+This application would be useful as masks nowadays have become a necessary item to wear when exposed to external entities and elements. This application will test datasets and provide users with the corresponding statistics. The application will analyse this dataset and output the results of this analysis i.e: how many images had masks on or off, which images had masks worn correctly or incorrectly and the occurrences of each individual mistake when a mask was worn incorrectly. 
 
 ### Programming language(s)
 
-> List the proposed language(s) to be used.
+Java, Python
 
 ### Programming tools / Tech stack
 
-> Describe the compiler, database, web server, etc., and any other software tools you plan to use.
+Tensorflow, DCU’s Gitlab, Android Studio, Eclipse, AWS Databases, Mocha.js
 
 ### Hardware
 
-> Describe any non-standard hardware components which will be required.
+PC, Linux, Windows, DCU’s Gitlab, Android phone for testing, Amazon Web Services
 
 ### Learning Challenges
 
-> List the main new things (technologies, languages, tools, etc) that you will have to learn.
+We will have to learn how to use Android Studio and the Android Studio Logcat in order to create and test our mobile application. As well as that, we will have to understand how to create and develop a neural network that can perform facial recognition on large dataset accurately. We will need to learn how to handle difficulties that facial recognition can face such as issues with poor lighting, strange angles and obstructed facial features from masks. Any additional features added at the end of our project may prove to be a learning challenge for us as well.
 
 ### Breakdown of work
 
-> Clearly identify who will undertake which parts of the project.
->
-> It must be clear from the explanation of this breakdown of work both that each student is responsible for
-> separate, clearly-defined tasks, and that those responsibilities substantially cover all of the work required
-> for the project.
+App Development - Mahjabeen will implement the front end to which Android Studio will be used to design and create a layout of the app and will be coded in the corresponding language, Java. 
 
-#### Student 1
+Creating a neural network - Andrew will be creating the facial recognition model and the neural network using the Tensorflow libraries. The datasets that will train and test the neural network will have thousands of images with both masks on and off. The links to the datasets can be found below.
 
-> *Student 1 should complete this section.*
+Setting up a database - Mahjabeen and Andrew will both work on setting up the database. Amazon Web Services will provide us with the necessary non-relational database required for this application. The AWS servers will communicate with both the front end and the back end to ensure that the application is fully functional.
 
-#### Student 2
-
-> *Student 2 should complete this section.*
-
-## Example
-
-> Example: Here's how you can include images in markdown documents...
-
-<!-- Basically, just use HTML! -->
-
-<p align="center">
-  <img src="./res/cat.png" width="300px">
-</p>
+Testing - We will be using Mocha.js to create the test suites that will provide the software testing for the neural network and facial recognition model, the functional testing, unit testing and user testing. To track the performance of the app, we will use Android Studio Logcat. This will display for example programming errors and it will make debugging easier.  
 
