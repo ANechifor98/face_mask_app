@@ -9,12 +9,12 @@
 
 |                     |                   |
 |---------------------|-------------------|
-|Project Title:       | xxxxxx            |
-|Student 1 Name:      | xxxxxx            |
-|Student 1 ID:        | xxxxxx            |
-|Student 2 Name:      | xxxxxx            |
-|Student 2 ID:        | xxxxxx            |
-|Project Supervisor:  | xxxxxx            |
+|Project Title:       | Facial Recognition App            |
+|Student 1 Name:      | Andrew Nechifor            |
+|Student 1 ID:        | 16415432            |
+|Student 2 Name:      | Mahjabeen Soomro            |
+|Student 2 ID:        | 17362496            |
+|Project Supervisor:  | Suzanne Little            |
 
 > Ensure that the Supervisor formally agrees to supervise your project; this is only recognised once the
 > Supervisor assigns herself/himself via the project Dashboard.
