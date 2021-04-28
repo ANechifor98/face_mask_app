@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+android:padding="10dp"
+tools:context=".MainActivity">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:padding="5dp" >
+
+    <Button
+        android:id="@+id/bSelect"
+        android:layout_width="392dp"
+        android:layout_height="60dp"
+        android:layout_below="@+id/imageView"
+        android:background="@drawable/buttons"
+        android:text="Select Photo"
+        android:textSize="20dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="5dp" >
+    </LinearLayout>
+</LinearLayout>
+
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:padding="5dp" >
+
+    <Button
+        android:id="@+id/bSelectDataset"
+        android:layout_width="392dp"
+        android:layout_height="60dp"
+        android:layout_below="@+id/imageView"
+        android:background="@drawable/buttons"
+        android:text="Select Dataset"
+        android:textSize="20dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="5dp" >
+
+
+    </LinearLayout>
+
+</LinearLayout>
+
+    <LinearLayout
+        android:layout_width="382dp"
+        android:layout_height="352dp"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="360dp"
+            android:layout_height="323dp"
+            tools:layout_editor_absoluteX="800dp"
+            tools:layout_editor_absoluteY="300dp"
+            tools:srcCompat="@tools:sample/avatars" />
+
+    </LinearLayout>
+</LinearLayout>
