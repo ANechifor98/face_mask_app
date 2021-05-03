@@ -11,7 +11,7 @@
         android:layout_width="408dp"
         android:layout_height="562dp"
         android:layout_marginStart="2dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="2dp"
         android:layout_marginBottom="32dp"
         app:layout_constraintBottom_toTopOf="@+id/imageselect"
@@ -21,17 +21,29 @@
         tools:src="@tools:sample/avatars" />
 
     <Button
-        android:id="@+id/imageselect"
-        android:layout_width="300dp"
-        android:layout_height="75dp"
-        android:layout_marginBottom="60dp"
-        android:text="Select Image"
-        android:textSize="30sp"
-        android:textColor="@color/ef_white"
+        android:id="@+id/photoselect"
+        android:layout_width="279dp"
+        android:layout_height="38dp"
+        android:layout_marginBottom="88dp"
         android:background="@drawable/buttons"
+        android:text="Take Photo"
+        android:textColor="@color/ef_white"
+        android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/imageselect"
+        android:layout_width="279dp"
+        android:layout_height="38dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/buttons"
+        android:text="Select Image"
+        android:textColor="@color/ef_white"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
 
