@@ -1,3 +1,4 @@
+
 package com.example.fmaskdet
 
 import android.app.Activity
@@ -40,7 +41,7 @@ class MainActivity : AppCompatActivity() {
             ImagePicker.create(this) // .create for multiple uses
                 .single() // only one image can be chosen
                 .showCamera(true) // camera icon shown- easier way of adding camera to the button
-                .start() // start the events
+                .start()
         }
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -50,125 +51,124 @@ class MainActivity : AppCompatActivity() {
 
             if (selectedimage != null) { // if the value is not equal to 0 then:
                 val store = ContentUris.withAppendedId( // allows camera to save picture into gallery in app to then select
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI, // allows image that has been selected to display
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                     selectedimage.id
                 )
 
-                var bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) //.P version for decoding - to use decodeBitmap
+                //bitmapversion image that gets passed through to be able to be called by Bitmap and set it in the ImageView
+                var bitmapversion = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) //.P version for decoding - to use decodeBitmap
                 {
-                    ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver, store))
+                    ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver, store)) // decode bitmap
                 } else {
                     MediaStore.Images.Media.getBitmap(contentResolver, store)
                 }
 
-                bitmap = Bitmap. createScaledBitmap(bitmap, 500, (bitmap.height / (bitmap.width/500F)).toInt(), true)
-                viewimage.setImageBitmap(bitmap)
+                // calling Bitmap to create scale and then set the updated bitmap to view in ImageView
+                bitmapversion = Bitmap. createScaledBitmap(bitmapversion, 500, (bitmapversion.height / (bitmapversion.width/500F)).toInt(), true)
+                viewimage.setImageBitmap(bitmapversion)
 
-                val inputBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true )
+                // images' bitmap copied
+                val currentBitmap = bitmapversion.copy(Bitmap.Config.ARGB_8888, true )
 
-                // Get a Paint instance
-                val myRectPaint = Paint()
-                myRectPaint.strokeWidth = 2F
-                myRectPaint.style = Paint.Style.STROKE
+                // using bitmap above, make a canvas using the images' bitmap
+                val bitmap1 = createBitmap(currentBitmap.width, currentBitmap.height, Bitmap.Config.RGB_565)
+                val canvas1 = Canvas(bitmap1)
+                canvas1.drawBitmap(currentBitmap, 0F, 0F, null) //draw bitmap of canvas using currentBitmap
 
-                // Create a canvas using the dimensions from the image's bitmap
-                val tempBitmap = createBitmap(inputBitmap.width, inputBitmap.height, Bitmap.Config.RGB_565)
-                val tempCanvas = Canvas(tempBitmap)
-                tempCanvas.drawBitmap(inputBitmap, 0F, 0F, null)
-
-                // Create a FaceDetector
-                val faceDetector = FaceDetector.Builder(applicationContext).setTrackingEnabled(false)
+                // Creating a face detector
+                val myfacedetector = FaceDetector.Builder(applicationContext).setTrackingEnabled(false)
                     .build()
-                if (!faceDetector.isOperational) {
+                if (!myfacedetector.isOperational) { // if the face detector is not operational, send a message saying that it failed
                     AlertDialog.Builder(this)
-                        .setMessage("face detector failed!")
+                        .setMessage("The face detector failed!")
                         .show()
                     return
                 }
 
-                // Detect the faces
-                val frame = Frame.Builder().setBitmap(inputBitmap).build()
-                val faces = faceDetector.detect(frame)
+                // Detect the faces in the bitmap of the image
+                val aFrame = Frame.Builder().setBitmap(currentBitmap).build() // build a frame on currentBitmap(image)
+                val face = myfacedetector.detect(aFrame) // value to detect faces
 
-                // Mark out the identified face
-                for (i in 0 until faces.size()) {
-                    val thisFace = faces.valueAt(i)
-                    val left = thisFace.position.x
-                    val top = thisFace.position.y
-                    val right = left + thisFace.width
-                    val bottom = top + thisFace.height
-                    val bitmapCropped = Bitmap.createBitmap(inputBitmap,
-                        left.toInt(),
-                        top.toInt(),
-                        if (right.toInt() > inputBitmap.width) {
-                            inputBitmap.width - left.toInt()
-                        } else {
-                            thisFace.width.toInt()
-                        },
-                        if (bottom.toInt() > inputBitmap.height) {
-                            inputBitmap.height - top.toInt()
-                        } else {
-                            thisFace.height.toInt()
-                        })
-                    val tag = predict(bitmapCropped)
+                // display the defined faces detected
+                for (i in 0 until face.size()) {
+                    val aFace = face.valueAt(i)
+                    val leftofface = aFace.position.x
+                    val topofface = aFace.position.y
+                    val rightofface = leftofface + aFace.width
+                    val bottomofface = topofface + aFace.height
+                    val bitmapAdjusted = Bitmap.createBitmap(currentBitmap, leftofface.toInt(), topofface.toInt(),
+                        if (rightofface.toInt() > currentBitmap.width) {
+                            currentBitmap.width - leftofface.toInt()
+                        } else { aFace.width.toInt() },
+                        if (bottomofface.toInt() > currentBitmap.height) {
+                            currentBitmap.height - topofface.toInt()
+                        } else { aFace.height.toInt() })
+
+                    // call Paint function
+                    val paintIt = Paint()
+                    paintIt.strokeWidth = 2F
+                    paintIt.style = Paint.Style.STROKE
+
+                    // call result class whether there is a mask or not
+                    val tag = result(bitmapAdjusted)
                     var guess = ""
-                    val mask = tag["Mask"]?: 0F // changed this
-                    val nomask = tag["NoMask"]?: 0F // changed this
+                    val mask = tag["Mask"]?: 0F
+                    val nomask = tag["NoMask"]?: 0F
 
                     if (mask > nomask){ // changed this
-                        myRectPaint.setColor(Color.GREEN)
-                        guess = "Mask : " + String.format("%.1f", mask*100) + "%"
+                        paintIt.setColor(Color.GREEN)
+                        guess = "Mask : " + String.format("%.0f", mask*100) + "%"
                     } else {
-                        myRectPaint.setColor(Color.RED)
-                        guess = "No Mask : " + String.format("%.1f", nomask*100) + "%"
+                        paintIt.setColor(Color.RED)
+                        guess = "No Mask : " + String.format("%.0f", nomask*100) + "%"
                     }
-                    myRectPaint.setTextSize(thisFace.width/8)
-                    myRectPaint.setTextAlign(Align.LEFT)
-                    tempCanvas.drawText(guess, left, top-9F, myRectPaint)
-                    tempCanvas.drawRoundRect(RectF(left, top, right, bottom), 2F, 2F, myRectPaint)
+                    paintIt.setTextSize(aFace.width/8)
+                    paintIt.setTextAlign(Align.CENTER)
+                    canvas1.drawText(guess, leftofface, topofface-9F, paintIt)
+                    canvas1.drawRoundRect(RectF(leftofface, topofface, rightofface, bottomofface), 2F, 2F, paintIt)
                 }
-                viewimage.setImageDrawable(BitmapDrawable(resources, tempBitmap))
-                // Release the FaceDetector
-                faceDetector.release()
+                viewimage.setImageDrawable(BitmapDrawable(resources, bitmap1))
+                // Release face detector
+                myfacedetector.release()
             }
         }
     }
 
+    // class to call tflite model
+    private fun result(input: Bitmap): MutableMap<String, Float> {
+        // load files
+        val tfliteFile = FileUtil.loadMappedFile(this, "model.tflite")
+        val tfmodel = Interpreter(tfliteFile, Interpreter.Options())
+        val labelsFile = FileUtil.loadLabels(this, "labels.txt")
 
-    private fun predict(input: Bitmap): MutableMap<String, Float> {
-        // load model
-        val modelFile = FileUtil.loadMappedFile(this, "model.tflite")
-        val model = Interpreter(modelFile, Interpreter.Options())
-        val labels = FileUtil.loadLabels(this, "labels.txt")
+        // type of data and shape of the images
+        val datatypeOfInput = tfmodel.getInputTensor(0).dataType()
+        val shapeOfInput = tfmodel.getInputTensor(0).shape()
+        val datatypeOfOutput = tfmodel.getOutputTensor(0).dataType()
+        val shapeOfOutput = tfmodel.getOutputTensor(0).shape()
 
-        // data type
-        val imageDataType = model.getInputTensor(0).dataType()
-        val inputShape = model.getInputTensor(0).shape()
+        var bufferinput = TensorImage(datatypeOfInput)
+        val bufferOutput = TensorBuffer.createFixedSize(shapeOfOutput, datatypeOfOutput)
 
-        val outputDataType = model.getOutputTensor(0).dataType()
-        val outputShape = model.getOutputTensor(0).shape()
-
-        var inputImageBuffer = TensorImage(imageDataType)
-        val outputBuffer = TensorBuffer.createFixedSize(outputShape, outputDataType)
-
-        // preprocess
-        val cropSize = min(input.width, input.height)
-        val imageProcessor = ImageProcessor.Builder()
-            .add(ResizeWithCropOrPadOp(cropSize, cropSize))
-            .add(ResizeOp(inputShape[1], inputShape[2], ResizeOp.ResizeMethod.NEAREST_NEIGHBOR))
+        // pre-processing the image as integers
+        val sizeAdjust = min(input.width, input.height)
+        val processedImage = ImageProcessor.Builder()
+            .add(ResizeWithCropOrPadOp(sizeAdjust, sizeAdjust))
+            .add(ResizeOp(shapeOfInput[1], shapeOfInput[2], ResizeOp.ResizeMethod.NEAREST_NEIGHBOR))
             .add(NormalizeOp(127.5f, 127.5f))
             .build()
 
-        // load image
-        inputImageBuffer.load(input)
-        inputImageBuffer = imageProcessor.process(inputImageBuffer)
+        // load the image to apply the pre-processing
+        bufferinput.load(input)
+        bufferinput = processedImage.process(bufferinput)
 
-        // run model
-        model.run(inputImageBuffer.buffer, outputBuffer.buffer.rewind())
+        // run the model on the image
+        tfmodel.run(bufferinput.buffer, bufferOutput.buffer.rewind())
 
-        // get output
-        val tagOutput = TensorLabel(labels, outputBuffer)
+        // recieve results of the model
+        val tagOutput = TensorLabel(labelsFile, bufferOutput)
 
+        // return the output as a float
         val tag = tagOutput.mapWithFloatValue
         return tag
     }
