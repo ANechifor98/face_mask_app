@@ -2,33 +2,33 @@ package com.example.fmaskdet
 
 import android.app.Activity
 import com.example.fmaskdet.R
+import android.os.Build
+import android.os.Bundle
 import android.content.ContentUris
 import android.content.Intent
+import androidx.appcompat.app.AlertDialog
+import android.provider.MediaStore
+import androidx.appcompat.app.AppCompatActivity
 import android.graphics.*
 import android.graphics.Paint.Align
 import android.graphics.drawable.BitmapDrawable
-import android.os.Build
-import android.os.Bundle
-import android.provider.MediaStore
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.createBitmap
 import com.bumptech.glide.GenericTransitionOptions.with
 import com.bumptech.glide.Glide.with
+import kotlinx.android.synthetic.main.activity_main.*
 import com.esafirm.imagepicker.features.ImagePicker
 import com.esafirm.imagepicker.model.Image
-import com.google.android.gms.vision.Frame
 import com.google.android.gms.vision.face.FaceDetector
-import kotlinx.android.synthetic.main.activity_main.*
-import org.tensorflow.lite.Interpreter
+import com.google.android.gms.vision.Frame
 import org.tensorflow.lite.support.common.FileUtil
-import org.tensorflow.lite.support.common.ops.NormalizeOp
-import org.tensorflow.lite.support.image.ImageProcessor
-import org.tensorflow.lite.support.image.TensorImage
-import org.tensorflow.lite.support.image.ops.ResizeOp
-import org.tensorflow.lite.support.image.ops.ResizeWithCropOrPadOp
 import org.tensorflow.lite.support.label.TensorLabel
+import org.tensorflow.lite.support.image.ImageProcessor
+import org.tensorflow.lite.support.image.ops.ResizeOp
+import org.tensorflow.lite.support.common.ops.NormalizeOp
+import org.tensorflow.lite.support.image.TensorImage
+import org.tensorflow.lite.support.image.ops.ResizeWithCropOrPadOp
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
+import org.tensorflow.lite.Interpreter
 import kotlin.math.min
 
 //private const val REQUEST_CODE = 30
