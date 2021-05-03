@@ -1,4 +1,3 @@
-
 package com.example.fmaskdet
 
 import android.app.Activity
@@ -14,6 +13,8 @@ import android.provider.MediaStore
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.createBitmap
+import com.bumptech.glide.GenericTransitionOptions.with
+import com.bumptech.glide.Glide.with
 import com.esafirm.imagepicker.features.ImagePicker
 import com.esafirm.imagepicker.model.Image
 import com.google.android.gms.vision.Frame
@@ -36,13 +37,22 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        imageselect.setOnClickListener { // listener for the select image button
-            ImagePicker.create(this) // .create for multiple uses
-                .single() // only one image can be chosen
-                .showCamera(true) // camera icon shown- easier way of adding camera to the button
-                .start()
+        
+    // listener for take photo button  
+    photoselect.setOnClickListener { 
+            ImagePicker.create(this) // jitpack.io
+                    .showCamera(true) // camera icon shown- easier way of adding camera to the button
+                    .single() // only one image can be chosen
+                    .start() // start the events
         }
+        // listener for select image button
+        imageselect.setOnClickListener { 
+            ImagePicker.create(this)
+                    .showCamera(false) // Don't need camera
+                    .single()
+                    .start()
+        }
+        
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
