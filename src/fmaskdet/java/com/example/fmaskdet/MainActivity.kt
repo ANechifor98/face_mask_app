@@ -37,22 +37,21 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        
-    // listener for take photo button  
-    photoselect.setOnClickListener { 
+
+        // listener for take photo button
+        photoselect.setOnClickListener {
             ImagePicker.create(this) // jitpack.io
                     .showCamera(true) // camera icon shown- easier way of adding camera to the button
                     .single() // only one image can be chosen
                     .start() // start the events
         }
         // listener for select image button
-        imageselect.setOnClickListener { 
+        imageselect.setOnClickListener {
             ImagePicker.create(this)
                     .showCamera(false) // Don't need camera
                     .single()
                     .start()
         }
-        
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -66,15 +65,15 @@ class MainActivity : AppCompatActivity() {
                 )
 
                 //bitmapversion image that gets passed through to be able to be called by Bitmap and set it in the ImageView
-                var bitmapversion = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) //.P version for decoding - to use decodeBitmap
+                var bitmapversion = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) //.P version for decoding - to use decodeBitmap
                 {
-                    ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver, store)) // decode bitmap
-                } else {
                     MediaStore.Images.Media.getBitmap(contentResolver, store)
+                } else {
+                    ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver, store)) // decode bitmap
                 }
 
                 // calling Bitmap to create scale and then set the updated bitmap to view in ImageView
-                bitmapversion = Bitmap. createScaledBitmap(bitmapversion, 500, (bitmapversion.height / (bitmapversion.width/500F)).toInt(), true)
+                bitmapversion = Bitmap.createScaledBitmap(bitmapversion, 700, (bitmapversion.height / (bitmapversion.width/700F)).toInt(), true)
                 viewimage.setImageBitmap(bitmapversion)
 
                 // images' bitmap copied
@@ -103,21 +102,21 @@ class MainActivity : AppCompatActivity() {
                 for (i in 0 until face.size()) {
                     val aFace = face.valueAt(i)
                     val leftofface = aFace.position.x
-                    val topofface = aFace.position.y
                     val rightofface = leftofface + aFace.width
+                    val topofface = aFace.position.y
                     val bottomofface = topofface + aFace.height
                     val bitmapAdjusted = Bitmap.createBitmap(currentBitmap, leftofface.toInt(), topofface.toInt(),
-                        if (rightofface.toInt() > currentBitmap.width) {
-                            currentBitmap.width - leftofface.toInt()
-                        } else { aFace.width.toInt() },
-                        if (bottomofface.toInt() > currentBitmap.height) {
-                            currentBitmap.height - topofface.toInt()
-                        } else { aFace.height.toInt() })
+                        if (rightofface.toInt() < currentBitmap.width) {
+                            aFace.width.toInt()
+                        } else { currentBitmap.width - leftofface.toInt() },
+                        if (bottomofface.toInt() < currentBitmap.height) {
+                            aFace.height.toInt()
+                        } else { currentBitmap.height - topofface.toInt()})
 
                     // call Paint function
                     val paintIt = Paint()
-                    paintIt.strokeWidth = 2F
-                    paintIt.style = Paint.Style.STROKE
+                    paintIt.strokeWidth = 3F
+                    paintIt.style = Paint.Style.STROKE // create a line box around the face
 
                     // call result class whether there is a mask or not
                     val tag = result(bitmapAdjusted)
@@ -125,16 +124,16 @@ class MainActivity : AppCompatActivity() {
                     val mask = tag["Mask"]?: 0F
                     val nomask = tag["NoMask"]?: 0F
 
-                    if (mask > nomask){ // changed this
+                    if (mask > nomask){
                         paintIt.setColor(Color.GREEN)
                         guess = "Mask : " + String.format("%.0f", mask*100) + "%"
                     } else {
                         paintIt.setColor(Color.RED)
                         guess = "No Mask : " + String.format("%.0f", nomask*100) + "%"
                     }
-                    paintIt.setTextSize(aFace.width/8)
+                    paintIt.setTextSize(aFace.width/7)
                     paintIt.setTextAlign(Align.CENTER)
-                    canvas1.drawText(guess, leftofface, topofface-9F, paintIt)
+                    canvas1.drawText(guess, leftofface, topofface-10F, paintIt)
                     canvas1.drawRoundRect(RectF(leftofface, topofface, rightofface, bottomofface), 2F, 2F, paintIt)
                 }
                 viewimage.setImageDrawable(BitmapDrawable(resources, bitmap1))
@@ -148,7 +147,7 @@ class MainActivity : AppCompatActivity() {
     private fun result(input: Bitmap): MutableMap<String, Float> {
         // load files
         val tfliteFile = FileUtil.loadMappedFile(this, "model.tflite")
-        val tfmodel = Interpreter(tfliteFile, Interpreter.Options())
+        val tfmodel = Interpreter(tfliteFile, Interpreter.Options()) // Interpreter called on tflite model
         val labelsFile = FileUtil.loadLabels(this, "labels.txt")
 
         // type of data and shape of the images
@@ -175,7 +174,7 @@ class MainActivity : AppCompatActivity() {
         // run the model on the image
         tfmodel.run(bufferinput.buffer, bufferOutput.buffer.rewind())
 
-        // recieve results of the model
+        // receive results of the model
         val tagOutput = TensorLabel(labelsFile, bufferOutput)
 
         // return the output as a float
