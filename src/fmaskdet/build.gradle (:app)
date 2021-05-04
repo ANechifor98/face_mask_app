@@ -53,6 +53,8 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    androidTestImplementation 'com.android.support:support-annotations:24.0.0'
+    androidTestImplementation 'com.android.support.test:runner:0.5'
 
     // added dependencies for tensorflowlite to work - found on github
     implementation 'org.tensorflow:tensorflow-lite:0.0.0-nightly'
